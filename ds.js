@@ -113,9 +113,72 @@
 // console.log(obj);
 
 
-var str = "   fly me   to   the moon  "
-const n = str.split(" ")
+// var str = "   fly me   to   the moon  "
+// const n = str.split(" ")
 
 
 
-console.log(word.length);
+// console.log(word.length);
+
+
+class Node{
+    constructor(value){
+        this.value = value
+        this.next = null
+    }
+}
+
+class List{
+    constructor(){
+        this.head = null
+        this.size = 0
+    }
+
+
+    add(val){
+        const node  = new Node(val)
+        if(this.head===null){
+this.head = node 
+        }else{
+            let curr = this.head
+            while(curr.next){
+                curr = curr.next
+            }
+            curr.next = node 
+          
+        }
+        this.size++
+    
+    }
+
+display(){
+    let curr = this.head
+while(curr){
+    console.log(curr.value);
+    curr = curr.next
+}
+
+}
+
+recursion(node){
+    if(node==null){
+        return
+    }
+
+    this.recursion(node.next)
+    console.log(node.value)
+}
+
+
+}
+
+const obj  =  new List()
+
+obj.add(1)
+obj.add(2)
+obj.add(3)
+obj.add(4)
+obj.add(5)
+
+// obj.recursion(obj.head)
+
