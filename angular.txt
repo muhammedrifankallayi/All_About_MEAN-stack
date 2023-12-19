@@ -1,0 +1,87 @@
+Excel code --->
+
+
+
+exportToExcel(headers, columns, data, name?: string) {
+    if (name) {
+      this.excelFileName = name + ".xlsx";
+    }
+    const Excel = require('exceljs');
+    var workbook = new Excel.Workbook();
+    workbook.creator = 'Web';
+    workbook.lastModifiedBy = 'Web'
+    workbook.created = new Date();
+    workbook.modified = new Date();
+    // workbook.addWorksheet(this.sName,{views :[{ state:'frozen',ySplit:3 ,xSplit : 2, activeCell :'A1', showGridLines :false}]});
+    workbook.addWorksheet(this.sName, { views: [{ state: 'frozen', activeCell: 'A1' }] });
+
+    var sheet = workbook.getWorksheet(1);
+
+    // var data1 = ["Exported Data"];
+    // sheet.addRow(data1);
+    // sheet.addRow("")
+    // sheet.getRow(3).values = this.cols
+    sheet.getRow(1).values = headers
+
+    sheet.columns = columns
+    // sheet.columns =[
+    //   {key :'ADULT'},
+    //   {key:'col2'},
+    //   {key:'col3'},
+    //   {key:'col4'},
+    //   {key:'col5'},
+
+    // ]
+
+    let colArryay = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1', 'J1', 'K1', 'L1', 'M1', 'N1', 'O1', 'P1', 'Q1', 'R1', 'S1', 'T1', 'U1', 'V1', 'W1', 'X1',
+      'Y1', 'Z1', 'AA1', 'AB1', 'AC1', 'AD1', 'AE1', 'AF1', 'AG1', 'AH1', 'AI1', 'AJ1', 'AK1', 'AL1', 'AM1', 'AN1', 'AO1', 'AP1', 'AQ1', 'AR1', 'AS1', 'AT1', 'AU1', 'AV1'
+      , 'AW1', 'AX1', 'AY1', 'AZ1', 'BA1', 'BB1', 'BC1', 'BD1', 'BE1', 'BF1', 'BG1', 'BH1', 'BI1', 'BJ1', 'BK1', 'BL1', 'BM1', 'BN1', 'BO1', 'BP1', 'BQ1', 'BR1', 'BS1', 'BT1', 'BU1', 'BV1',
+      'BW1', 'BX1', 'BY1', 'BZ1', 'CA1', 'CB1', 'CC1', 'CD1', 'CE1', 'CF1', 'CG1', 'CH1', 'CI1', 'CJ1', 'CK1', 'CL1', 'CM1', 'CN1', 'CO1', 'CP1', 'CQ1', 'CR1', 'CS1', 'CT1', 'CU1', 'CV1',
+      'CW1', 'CX1', 'CY1', 'CZ1', 'DA1', 'DB1', 'DC1', 'DD1', 'DE1', 'DF1', 'DG1', 'DH1', 'DI1', 'DJ1', 'DK1', 'DL1', 'DM1', 'DN1', 'DO1', 'DP1', 'DQ1', 'DR1', 'DS1', 'DT1', 'DU1', 'DV1', 'DW1', 'DX1',
+      'DY1', 'DZ1',]
+    this.colArryay = []
+    colArryay.forEach((x, i) => {
+      if (i < columns.length) {
+        this.colArryay.push(colArryay[i])
+      }
+    })
+    sheet.addRows(data)
+    sheet = this.applyRowsStyle(sheet)
+    sheet.getCell('A1', 'A2').font = {
+      name: 'Tahoma',
+      family: 2,
+      size: 18
+    }
+    this.colArryay.map(key => {
+      sheet.getCell(key).fill = {
+        type: 'gradient',
+        gradient: 'angle',
+        degree: 0,
+        stops: [
+          { position: 0, color: { argb: 'd9f1fa' } },
+          { position: 0.5, color: { argb: 'd9f1fa' } },
+          { position: 1, color: { argb: 'd9f1fa' } },
+
+        ]
+      }
+      sheet.getCell(key).alignment = { wrapText: true, vertical: 'middle', horizontal: 'center', }
+      sheet.getCell(key).border = { right: { style: 'thin' }, top: { style: 'thin' } }
+
+      sheet.getCell(key).font = {
+        name: 'Tahoma',
+        size: 8,
+        bold: true
+      }
+
+    })
+    sheet.addRow([this.footer])
+    sheet.columns.forEach(column => {
+      column.width = 11
+    })
+    workbook.xlsx.writeBuffer().then(data => {
+      var blob = new Blob([data], { type: this.blobType })
+      FileSaver.saveAs(blob, this.excelFileName, true)
+    })
+
+
+  }
