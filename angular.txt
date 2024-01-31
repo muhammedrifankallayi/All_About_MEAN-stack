@@ -100,3 +100,81 @@ mobilesize view ---------------->
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
   }
+Import excel
+
+   let fileReader = new FileReader();
+      fileReader.onload = e => {
+        this.arrayBuffer = fileReader.result;
+
+        var data = new Uint8Array(this.arrayBuffer);
+        var arr = new Array();
+        for (var i = 0; i != data.length; ++i)
+          arr[i] = String.fromCharCode(data[i]);
+
+        var bstr = arr.join("");
+        var workbook = XLSX.read(bstr, { type: "binary" });
+        var first_sheet_name = workbook.SheetNames[0];
+
+        var worksheet = workbook.Sheets[first_sheet_name];
+        this.AgentListExcel = XLSX.utils.sheet_to_json(worksheet);
+        if (this.AgentListExcel.length > 0) {
+
+          if (this.AgentListExcel.length < 5000) {
+            this.AgentListExcel.forEach((x, i) => {
+
+              const vat_amount = Number(x[workbook.Sheets[first_sheet_name].L1.h])
+              const date = x[workbook.Sheets[first_sheet_name].C1.h];
+              const time = x[workbook.Sheets[first_sheet_name].D1.h]
+              const combinedDate = this.Combinedate(date, time)
+
+
+              x.Idd = 0
+              x.No = x[workbook.Sheets[first_sheet_name].A1.h] ? x[workbook.Sheets[first_sheet_name].A1.h] : i + 1;
+              x.StationNo = x[workbook.Sheets[first_sheet_name].B1.h] ? x[workbook.Sheets[first_sheet_name].B1.h] : "";
+              x.Date2 = x[workbook.Sheets[first_sheet_name].C1.h] ? x[workbook.Sheets[first_sheet_name].C1.h] : ""
+              x.Time = x[workbook.Sheets[first_sheet_name].D1.h] ? x[workbook.Sheets[first_sheet_name].D1.h] : ""
+              x.Date = combinedDate
+              x.Inv_No = x[workbook.Sheets[first_sheet_name].E1.h] ? x[workbook.Sheets[first_sheet_name].E1.h] : 0
+              x.Item_Name = x[workbook.Sheets[first_sheet_name].F1.h] ? x[workbook.Sheets[first_sheet_name].F1.h] : ""
+              x.InvTp = 0 //x[workbook.Sheets[first_sheet_name].G1.h]=="Sale"?0:1
+              x.PayTP = 0
+              x.UPrice = x[workbook.Sheets[first_sheet_name].I1.h] ? x[workbook.Sheets[first_sheet_name].I1.h] : 0
+              x.Qty = x[workbook.Sheets[first_sheet_name].J1.h] ? x[workbook.Sheets[first_sheet_name].J1.h] : 0
+              x.Total = x[workbook.Sheets[first_sheet_name].K1.h] ? Number(x[workbook.Sheets[first_sheet_name].K1.h]) - vat_amount : 0
+              x.VatAmt = x[workbook.Sheets[first_sheet_name].L1.h] ? x[workbook.Sheets[first_sheet_name].L1.h] : 0
+              x.InvRefNo = x[workbook.Sheets[first_sheet_name].E1.h] ? x[workbook.Sheets[first_sheet_name].E1.h] : ""
+              x.Curr = this.Currency
+              x.Net_Invoice = Number(x.Total) + Number(x.VatAmt)
+              x.Tax1_per = 15
+              x.Disc_per = 0
+              x.TotDisc = 0
+              x.Tax_Code = "S"
+              x.CustNo = 1
+              x.SupId = 0
+              x.SubCompId = 1
+              x.Remark = ""
+              x.RInvN = ""
+              // x.EventIdd = 0
+              x.RoundOff = 0
+              x.UID = 'admin'
+            })
+            this.searchList = this.AgentListExcel
+            this.loader.close()
+             this.ValidateZatcaExcel(this.AgentListExcel)
+          }
+          else {
+            this.snackBar.open("You Can Upload Maxium upto 5000", "OK", {
+              duration: 4000
+            });
+            this.loader.close();
+          }
+        } else {
+          this.loader.close();
+          this.snackBar.open("Can't upload Excel sheet is empty", "ok", { duration: 2000 })
+        };
+
+      }
+
+
+      fileReader.readAsArrayBuffer(this.file);
+    }
