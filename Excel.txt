@@ -1,0 +1,111 @@
+Upload() {
+
+    if (this.file == null) {
+      this.snackBar.open("please select the file", "Ok", { duration: 4000 })
+      return
+    }
+    // start
+    if (this.file) {
+      this.loader.open()
+      let fileReader = new FileReader();
+      fileReader.onload = e => {
+        this.arrayBuffer = fileReader.result;
+
+        var data = new Uint8Array(this.arrayBuffer);
+        var arr = new Array();
+        for (var i = 0; i != data.length; ++i)
+          arr[i] = String.fromCharCode(data[i]);
+
+        var bstr = arr.join("");
+        var workbook = XLSX.read(bstr, { type: "binary" });
+        var first_sheet_name = workbook.SheetNames[0];
+
+        var worksheet = workbook.Sheets[first_sheet_name];
+        this.AgentListExcel = XLSX.utils.sheet_to_json(worksheet);
+        if (this.AgentListExcel.length > 0) {
+
+          if (this.AgentListExcel.length < 5000) {
+
+
+            this.AgentListExcel.forEach((x, i) => {
+              x.Idd = 0;
+              x.AgentName = x[workbook.Sheets[first_sheet_name].A1.h]
+              x.AgentNameArabic = x[workbook.Sheets[first_sheet_name].B1.h]
+              x.MofaFileNumber = x[workbook.Sheets[first_sheet_name].C1.h] == null ? 0 : x[workbook.Sheets[first_sheet_name].C1.h] 
+              x.AgentType = x[workbook.Sheets[first_sheet_name].D1.h]== null ? "" : x[workbook.Sheets[first_sheet_name].D1.h] 
+              x.CountryName = x[workbook.Sheets[first_sheet_name].E1.h] == null ? "" : x[workbook.Sheets[first_sheet_name].E1.h] 
+              x.Telephone = x[workbook.Sheets[first_sheet_name].F1.h] == null ? "" : x[workbook.Sheets[first_sheet_name].F1.h] 
+              x.ContactPerson = x[workbook.Sheets[first_sheet_name].G1.h]== null ? "" : x[workbook.Sheets[first_sheet_name].G1.h] 
+              x.JobTitle = x[workbook.Sheets[first_sheet_name].H1.h] == null ? "" : x[workbook.Sheets[first_sheet_name].H1.h]
+              x.PriceCategory = x[workbook.Sheets[first_sheet_name].I1.h] == null ? "" : x[workbook.Sheets[first_sheet_name].I1.h]
+              x.Street = x[workbook.Sheets[first_sheet_name].J1.h] == null ? "" : x[workbook.Sheets[first_sheet_name].J1.h] 
+              x.PlotNo = x[workbook.Sheets[first_sheet_name].K1.h]== null ? 0 : x[workbook.Sheets[first_sheet_name].K1.h]
+              x.BuildingNo = x[workbook.Sheets[first_sheet_name].L1.h]== null ? "" : x[workbook.Sheets[first_sheet_name].L1.h] 
+              x.District = x[workbook.Sheets[first_sheet_name].M1.h]== null ? "" : x[workbook.Sheets[first_sheet_name].M1.h] 
+              x.City = x[workbook.Sheets[first_sheet_name].N1.h] == null ? "" : x[workbook.Sheets[first_sheet_name].N1.h] 
+              x.State = x[workbook.Sheets[first_sheet_name].O1.h] == null ? "" : x[workbook.Sheets[first_sheet_name].O1.h]
+              x.Address = ""
+              x.ZipCode = ""
+              x.Fax = ""
+              x.Extension = ""
+              x.Mobile = ""
+              x.Email = ""
+              x.WebAddress = ""
+              x.ContactPersonTitle = ""
+              x.ContactPersonDesigination = ""
+              x.Commission = ""
+              x.CreditLimit = 0
+              x.GlAccountNumber = ""
+              x.SupplierAccountNumber = ""
+              x.BeneficiaryName = ""
+              x.BankAccountNumber = " "
+              x.BankName = ""
+              x.BankAddress = ""
+              x.OpeningBalance = 0
+              x.PriceCategoryId = 0
+              x.AccountBlock = 0
+              x.AccountBlockReason = ""
+              x.PaymentType = 0
+              x.CountryId = 0
+              x.RegionId = 0
+              x.CashGurantee = 0
+              x.BankGurantee = 0
+              x.LocalContactAddress = ""
+              x.VipVisaRate = ""
+              x.TransportCommission = 0
+              x.AgentSupplierType = 0
+              x.TaxRegistrationNumber = ""
+              x.MarketId = 0
+              x.VisaIncludeVat = 0
+              x.AdditionalStreet = ""
+              x.VisaGroupId = 0
+              x.CrmCustomerId = 0
+              x.lstagentConDet = [];
+              x.listSubAgent = [];
+
+
+            })
+            this.loader.close()
+            this.CheckAgentAddExcelValid(this.AgentListExcel)
+          }
+          else {
+            this.snackBar.open("You Can Upload Maxium upto 5000", "OK", {
+              duration: 4000
+            });
+            this.loader.close();
+          }
+        } else {
+          this.loader.close();
+          this.snackBar.open("Can't upload Excel sheet is empty", "ok", { duration: 2000 })
+        };
+
+      }
+
+
+      fileReader.readAsArrayBuffer(this.file);
+    }
+
+    // end
+
+
+  }
