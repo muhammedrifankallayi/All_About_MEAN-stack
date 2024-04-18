@@ -109,3 +109,29 @@ Upload() {
 
 
   }
+
+
+
+
+Muhammed Rifan
+
+18 - 02 - 2024
+
+Core Erp
+
+---> Added TaxType field in Service Add Popup and TaxType label in Service Table
+---> Added Default Hotel binding and Disabling following Components
+ #Client Reservation by Hotel
+ #Arival StateMent 
+ #Room Night Report
+ #Hotel Sales Report
+ #Hotel Sales Consolidated Report
+ #Hotel Sales Details report
+ #Daily Hotel sales Report
+ #Daily Hotel Sales Consolidated
+ #Agent Reservation Report
+ #Option Date Warning 
+ #Room Night Report By Top Producer
+ #Budget Report By Date 
+--->Added colored text for booking confirmed and trenetive in resevation list popup
+--->Created AddGuest Details Popup 
