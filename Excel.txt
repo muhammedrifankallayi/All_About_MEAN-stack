@@ -135,3 +135,12 @@ Core Erp
  #Budget Report By Date 
 --->Added colored text for booking confirmed and trenetive in resevation list popup
 --->Created AddGuest Details Popup 
+
+
+
+19-04-2024
+
+---> Guest Name  Details Add Backend save and GetData
+---> Reservation Details View in GuestName Add
+---> Added Guest Name Add Popup in Reservation page
+---> Room status View Calender Month Change Field Added  
