@@ -6,3 +6,64 @@ Transport_Web
 --> Craete Debit Or Credit Note pending List
 --> Created Debit Credit Note Report
 --> Debit Credit List Popup
+
+Flutter Http Post
+------------------>
+
+methodPost(String url, dynamic _body) async {
+  try {
+    SharedPreferences sharedPreferences;
+    sharedPreferences = await SharedPreferences.getInstance();
+    var tocken = sharedPreferences.getString("userToken").toString();
+
+
+    http.Response result = await http.post(Uri.parse(localhost + url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "bearer " + tocken,
+        },
+        body: jsonEncode(_body));
+
+
+    return json.decode(utf8.decode(result.bodyBytes));
+  } catch (e) {
+    // Fluttertoast.showToast(
+    //     msg: e.toString(),
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.CENTER,
+    //     timeInSecForIosWeb: 1,
+    //     backgroundColor: Colors.red,
+    //     textColor: Colors.white,
+    //     fontSize: 16.0);
+  }
+}
+
+
+
+Flutter Http get
+---------------->
+
+
+methodget(String url) async {
+    SharedPreferences sharedPreferences;
+    sharedPreferences = await SharedPreferences.getInstance();
+
+    var tocken = sharedPreferences.getString("userToken").toString();
+    var domainname = sharedPreferences.getString("domainname").toString();
+     localhost = domainname + "/api/";
+    var result = await http.get(
+      Uri.parse(localhost + url),
+      headers: {
+        HttpHeaders.authorizationHeader: "bearer " + tocken,
+      },
+    );
+
+    var data = json.decode(utf8.decode(result.bodyBytes));
+
+    return data;
+ 
+}
+
+
+
+
